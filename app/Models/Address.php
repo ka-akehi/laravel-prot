@@ -6,10 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Address extends Model
 {
-    protected $fillable = ['customer_id', 'address'];
+    protected $fillable = ['address'];
 
-    public function customer()
+    public function customers()
     {
-        return $this->belongsTo(Customer::class);
+        return $this->hasMany(Customer::class);
     }
 }
