@@ -127,6 +127,21 @@ return [
             'path' => storage_path('logs/laravel.log'),
         ],
 
+        'worker1' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/worker1.log'),
+            'level' => 'debug',
+        ],
+        'worker2' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/worker2.log'),
+            'level' => 'debug',
+        ],
+        'worker3' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/worker3.log'),
+            'level' => 'debug',
+        ],
     ],
 
 ];
