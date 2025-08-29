@@ -12,10 +12,12 @@ COPY . .
 # Supervisor 設定フォルダを作成
 RUN mkdir -p /etc/supervisor/conf.d
 
-# supervisord.conf をコピー（後で作成）
+# supervisord.conf をコピー
 COPY supervisord.conf /etc/supervisor/supervisord.conf
 
-# laravel-worker.conf をコピー（後で作成）
+# laravel-worker.conf をコピー
 COPY laravel-worker.conf /etc/supervisor/conf.d/laravel-worker.conf
+
+COPY laravel-redis-worker.conf /etc/supervisor/conf.d/laravel-redis-worker.conf
 
 CMD ["supervisord", "-c", "/etc/supervisor/supervisord.conf"]

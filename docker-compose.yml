@@ -1,11 +1,30 @@
 version: "3.8"
 
 services:
+    # ✅ 既存の Database Queue + Supervisor
     laravel-app:
         build: .
         container_name: laravel-app
         volumes:
             - .:/var/www/html
         working_dir: /var/www/html
+        # Databaseキュー用のSupervisorが動作
+
+    # ✅ Redis Queue + Supervisor
+    laravel-redis-worker:
+        build: .
+        container_name: laravel-redis-worker
+        volumes:
+            - .:/var/www/html
+        working_dir: /var/www/html
+        environment:
+            - QUEUE_CONNECTION=redis # Redisキューを使用
+        depends_on:
+            - redis
+
+    # ✅ Redisサービス
+    redis:
+        image: redis:alpine
+        container_name: redis
         ports:
-            - "8000:8000"
+            - "6379:6379"

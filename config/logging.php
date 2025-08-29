@@ -142,6 +142,12 @@ return [
             'path' => storage_path('logs/worker3.log'),
             'level' => 'debug',
         ],
+
+        'redis-worker' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/redis-worker.log'),
+            'level' => 'debug',
+        ],
     ],
 
 ];
