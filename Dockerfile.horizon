@@ -1,0 +1,35 @@
+# ベースイメージ
+FROM php:8.3-fpm
+
+# 必要なパッケージ・拡張をインストール
+RUN apt-get update && apt-get install -y \
+    git \
+    unzip \
+    curl \
+    libzip-dev \
+    zip \
+    supervisor \
+    && docker-php-ext-install pdo pdo_mysql zip pcntl
+
+# Composerインストール
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+
+# 作業ディレクトリ作成
+WORKDIR /var/www
+
+# アプリケーションファイルをコピー
+COPY . /var/www
+
+# Composer依存インストール
+RUN composer install --no-dev --optimize-autoloader
+
+# パーミッション調整
+RUN chown -R www-data:www-data /var/www \
+    && chmod -R 755 /var/www/storage
+
+# Supervisor 設定ファイルをコピー
+COPY horizon.conf /etc/supervisor/conf.d/horizon.conf
+COPY supervisord.conf /etc/supervisor/supervisord.conf
+
+# Supervisor をフォアグラウンドで起動
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/supervisord.conf"]

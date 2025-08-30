@@ -8,7 +8,8 @@ services:
         volumes:
             - .:/var/www/html
         working_dir: /var/www/html
-        # Databaseキュー用のSupervisorが動作
+        ports:
+            - "8000:8000"
 
     # ✅ Redis Queue + Supervisor
     laravel-redis-worker:
@@ -18,7 +19,7 @@ services:
             - .:/var/www/html
         working_dir: /var/www/html
         environment:
-            - QUEUE_CONNECTION=redis # Redisキューを使用
+            - QUEUE_CONNECTION=redis
         depends_on:
             - redis
 
@@ -28,3 +29,16 @@ services:
         container_name: redis
         ports:
             - "6379:6379"
+
+    # ✅ Horizon 専用コンテナ（Supervisor起動）
+    laravel-horizon:
+        build:
+            context: .
+            dockerfile: Dockerfile.horizon
+        volumes:
+            - .:/var/www
+        working_dir: /var/www
+        environment:
+            - QUEUE_CONNECTION=redis
+        depends_on:
+            - redis
