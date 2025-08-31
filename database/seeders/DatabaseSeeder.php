@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             RawOrdersTableSeeder::class,
+            CountrySeeder::class,
         ]);
     }
 }
