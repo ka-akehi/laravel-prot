@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 
 class RetryHelperExample extends Command
 {
@@ -17,11 +18,11 @@ class RetryHelperExample extends Command
         $result = retry(
             3, // 最大試行回数
             function () {
-                \Log::info('実行中...');
+                Log::info('実行中...');
 
                 // 50%の確率で失敗させる
                 if (rand(0, 1)) {
-                    \Log::error('失敗しました');
+                    Log::error('失敗しました');
                     throw new \Exception('ランダム失敗 (retry helper)');
                 }
 

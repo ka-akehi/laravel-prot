@@ -7,6 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class DefaultPriorityJob implements ShouldQueue
 {
@@ -14,7 +15,7 @@ class DefaultPriorityJob implements ShouldQueue
 
     public function handle(): void
     {
-        \Log::info('⚖️ Default Priority Job 実行！');
+        Log::info('⚖️ Default Priority Job 実行！');
         sleep(1);
     }
 }

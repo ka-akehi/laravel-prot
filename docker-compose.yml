@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
     # ✅ 既存の Database Queue + Supervisor
     laravel-app:

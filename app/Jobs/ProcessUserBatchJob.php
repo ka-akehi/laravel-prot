@@ -9,6 +9,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class ProcessUserBatchJob implements ShouldQueue
 {
@@ -28,7 +29,7 @@ class ProcessUserBatchJob implements ShouldQueue
         if ($user) {
             // ダミー処理（学習用）
             usleep(5000); // 5ms 停止
-            \Log::info("処理済みユーザID: {$this->userId}");
+            Log::info("処理済みユーザID: {$this->userId}");
         }
     }
 }

@@ -7,6 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class RetryJob implements ShouldQueue
 {
@@ -21,6 +22,6 @@ class RetryJob implements ShouldQueue
             throw new \Exception("⚠️ RetryJob failed on attempt {$attempt}");
         }
 
-        \Log::info("🔄 RetryJob succeeded on attempt {$attempt}");
+        Log::info("🔄 RetryJob succeeded on attempt {$attempt}");
     }
 }

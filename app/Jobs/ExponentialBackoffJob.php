@@ -7,6 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class ExponentialBackoffJob implements ShouldQueue
 {
@@ -23,13 +24,13 @@ class ExponentialBackoffJob implements ShouldQueue
 
     public function handle()
     {
-        \Log::info("指数バックオフジョブ 実行中... attempt={$this->attempts()}");
+        Log::info("指数バックオフジョブ 実行中... attempt={$this->attempts()}");
 
         // 50%の確率で失敗させる
         if (rand(0, 1)) {
             throw new \Exception('ランダム失敗 (ExponentialBackoffJob)');
         }
 
-        \Log::info('指数バックオフジョブ 成功！');
+        Log::info('指数バックオフジョブ 成功！');
     }
 }

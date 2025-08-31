@@ -9,6 +9,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class ProcessUserJob implements ShouldQueue
 {
@@ -28,7 +29,7 @@ class ProcessUserJob implements ShouldQueue
     {
         $user = User::find($this->userId);
         if ($user) {
-            \Log::channel($this->workerName)->info("👷 {$this->workerName} がユーザID {$this->userId} を処理しました");
+            Log::channel($this->workerName)->info("👷 {$this->workerName} がユーザID {$this->userId} を処理しました");
             usleep(5000);
         }
     }

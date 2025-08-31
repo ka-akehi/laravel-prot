@@ -7,6 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class TaggedJob implements ShouldQueue
 {
@@ -15,7 +16,7 @@ class TaggedJob implements ShouldQueue
     public function handle()
     {
         sleep(2); // 見やすくするために遅延
-        \Log::info('🏷️ TaggedJob executed!');
+        Log::info('🏷️ TaggedJob executed!');
     }
 
     /**

@@ -7,6 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class LowPriorityJob implements ShouldQueue
 {
@@ -14,7 +15,7 @@ class LowPriorityJob implements ShouldQueue
 
     public function handle(): void
     {
-        \Log::info('🐢 Low Priority Job 実行！');
+        Log::info('🐢 Low Priority Job 実行！');
         sleep(1);
     }
 }

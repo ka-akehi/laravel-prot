@@ -7,6 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class SaveToDatabaseJob implements ShouldQueue
 {
@@ -14,7 +15,7 @@ class SaveToDatabaseJob implements ShouldQueue
 
     public function handle(): void
     {
-        \Log::info('Step 3: データをDBに保存しました。');
+        Log::info('Step 3: データをDBに保存しました。');
         sleep(1);
     }
 }

@@ -7,6 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class SampleRetryJob implements ShouldQueue
 {
@@ -20,13 +21,13 @@ class SampleRetryJob implements ShouldQueue
 
     public function handle()
     {
-        \Log::info("ジョブ実行中... attempt={$this->attempts()}");
+        Log::info("ジョブ実行中... attempt={$this->attempts()}");
 
         // 学習用にわざと失敗させる（50%の確率で例外発生）
         if (rand(0, 1)) {
             throw new \Exception('ランダム失敗');
         }
 
-        \Log::info('ジョブ成功！');
+        Log::info('ジョブ成功！');
     }
 }
