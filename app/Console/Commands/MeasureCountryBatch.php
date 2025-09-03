@@ -10,13 +10,13 @@ use Illuminate\Support\Facades\Log;
 
 class MeasureCountryBatch extends Command
 {
-    protected $signature = 'measure:countries {count=5000} {--mode=batch}';
+    protected $signature = 'measure:countries {--count=5000} {--mode=batch}';
 
     protected $description = 'Measure performance of country processing (batch=chunk job, queue=single jobs)';
 
     public function handle(): void
     {
-        $count = (int) $this->argument('count');
+        $count = (int) $this->option('count');
         $mode = $this->option('mode');
 
         $this->info("🚀 Starting performance test: {$count} records (mode={$mode})");
