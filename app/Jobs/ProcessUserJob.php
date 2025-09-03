@@ -19,7 +19,7 @@ class ProcessUserJob implements ShouldQueue
 
     protected string $workerName;
 
-    public function __construct(int $userId, string $workerName)
+    public function __construct(int $userId, string $workerName = 'default') // ★ workerName を追加
     {
         $this->userId = $userId;
         $this->workerName = $workerName;
