@@ -2,8 +2,14 @@ FROM php:8.3-cli
 
 # 必要な拡張をインストール
 RUN apt-get update && apt-get install -y \
-    unzip git curl supervisor sqlite3 libsqlite3-dev \
-    && docker-php-ext-install pdo pdo_sqlite
+    unzip \
+    git \
+    curl \
+    supervisor \
+    sqlite3 \
+    libsqlite3-dev \
+    procps \
+    && docker-php-ext-install pdo pdo_sqlite pdo_mysql  # ← pdo_mysql を追加
 
 WORKDIR /var/www/html
 

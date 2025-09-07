@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
             RawOrdersTableSeeder::class,
             CountrySeeder::class,
             UserSeeder::class,
+            AddressesTableSeeder::class,
         ]);
     }
 }

@@ -3,22 +3,48 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class UserSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        $countryIds = \App\Models\Country::pluck('id')->toArray();
+        // Country の ID 範囲を取得
+        $minId = DB::table('countries')->min('id');
+        $maxId = DB::table('countries')->max('id');
 
-        // 1,000件 × 30回 = 30,000件
-        for ($i = 0; $i < 30; $i++) {
-            \App\Models\User::factory(1000)->make()->each(function ($user) use ($countryIds) {
-                $user->country_id = $countryIds[array_rand($countryIds)];
-                $user->save();
-            });
+        $batchSize = 1000;   // 一度に insert する件数
+        $batches = 30;   // ループ回数 → 合計 300万件
+
+        $fixedPassword = Hash::make('password');
+
+        foreach (range(1, $batches) as $i) {
+            $users = [];
+
+            foreach (range(1, $batchSize) as $j) {
+                $users[] = [
+                    'name' => 'User '.Str::random(10),
+                    'email' => Str::random(10).'@example.com',
+                    'password' => $fixedPassword,
+                    'country_id' => rand($minId, $maxId), // ★ 範囲からランダム選択
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ];
+            }
+
+            DB::table('users')->insert($users);
+
+            unset($users); // メモリ解放
+
+            // 進捗ログを出す（10万件ごとに）
+            if ($i % 100 === 0) {
+                $inserted = $i * $batchSize;
+                $this->command->info("Inserted {$inserted} users...");
+            }
         }
+
+        $this->command->info('✅ Completed: 3,000,000 users inserted.');
     }
 }

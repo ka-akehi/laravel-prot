@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('countries', function (Blueprint $table) {
             $table->id();
-            $table->string('code', 3)->unique(); // ISOコード
+            $table->string('code', 16)->unique(); // ISOコード
             $table->string('name', 100);         // 国名
             $table->string('region', 50)->nullable(); // 地域
             $table->boolean('is_active')->default(true); // 有効フラグ
