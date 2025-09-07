@@ -1,0 +1,76 @@
+services:
+    laravel-app:
+        build:
+            context: .
+            dockerfile: docker/app.Dockerfile
+        container_name: laravel-app
+        environment:
+            ENTRYPOINT_MODE: dev
+        volumes:
+            - .:/var/www
+            - ./.env:/var/www/.env:ro
+            - /var/www/vendor
+        ports:
+            - "8000:8000"
+        depends_on:
+            - mysql
+            - redis
+
+    laravel-redis-worker:
+        build:
+            context: .
+            dockerfile: docker/redis-worker.Dockerfile
+        container_name: laravel-redis-worker
+        environment:
+            ENTRYPOINT_MODE: supervisor
+        volumes:
+            - .:/var/www
+            - ./.env:/var/www/.env:ro
+            - /var/www/vendor
+        depends_on:
+            - redis
+            - mysql
+
+    laravel-horizon:
+        build:
+            context: .
+            dockerfile: docker/horizon.Dockerfile
+        container_name: laravel-horizon
+        environment:
+            ENTRYPOINT_MODE: supervisor
+        volumes:
+            - .:/var/www
+            - ./.env:/var/www/.env:ro
+            - /var/www/vendor
+        depends_on:
+            - redis
+            - mysql
+
+    redis:
+        image: redis:alpine
+        container_name: redis
+        ports:
+            - "6379:6379"
+
+    mysql:
+        image: mysql:8.0
+        container_name: mysql
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_DATABASE: laravel
+            MYSQL_USER: laravel
+            MYSQL_PASSWORD: secret
+        ports:
+            - "3306:3306"
+        volumes:
+            - ./mysql_data:/var/lib/mysql
+
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin
+        container_name: phpmyadmin
+        ports:
+            - "8080:80"
+        environment:
+            PMA_HOST: mysql
+            MYSQL_ROOT_PASSWORD: root
