@@ -3,7 +3,7 @@
 set -e
 
 echo "▶️ Composer install (safe re-run)"
-composer install --prefer-source --optimize-autoloader --no-interaction
+composer install --prefer-dist --optimize-autoloader --no-interaction
 
 echo "📁 Ensuring cache dirs"
 mkdir -p bootstrap/cache storage/framework/cache/data
