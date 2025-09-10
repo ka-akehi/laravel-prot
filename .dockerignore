@@ -1,3 +1,13 @@
 # .dockerignore
 /vendor
 /node_modules
+/storage
+/.git
+.env
+*.log
+*.zip
+*.pdf
+*.DS_Store
+docker-compose.yml
+README.md
+.git

@@ -1,66 +1,115 @@
 services:
-    # ✅ 既存の Database Queue + Supervisor
     laravel-app:
-        build: .
+        build:
+            context: .
+            dockerfile: docker/app.Dockerfile
         container_name: laravel-app
+        environment:
+            ENTRYPOINT_MODE: dev
         volumes:
-            - .:/var/www/html
-        working_dir: /var/www/html
+            - ./app:/var/www/app
+            - ./bootstrap:/var/www/bootstrap
+            - ./config:/var/www/config
+            - ./database:/var/www/database
+            - ./lang:/var/www/lang
+            - ./public:/var/www/public
+            - ./resources:/var/www/resources
+            - ./routes:/var/www/routes
+            - ./storage:/var/www/storage
+            - ./artisan:/var/www/artisan
+            - ./composer.json:/var/www/composer.json
+            - ./composer.lock:/var/www/composer.lock
+            - ./.env:/var/www/.env:ro
+            - /var/www/vendor
+            - /var/www/node_modules
         ports:
             - "8000:8000"
-        command: php artisan serve --host=0.0.0.0 --port=8000
-
-    # ✅ Redis Queue + Supervisor
-    laravel-redis-worker:
-        build: .
-        container_name: laravel-redis-worker
-        volumes:
-            - .:/var/www/html
-        working_dir: /var/www/html
-        environment:
-            - QUEUE_CONNECTION=redis
         depends_on:
+            - mysql
             - redis
 
-    # ✅ Redisサービス
+    laravel-redis-worker:
+        build:
+            context: .
+            dockerfile: docker/redis-worker.Dockerfile
+        container_name: laravel-redis-worker
+        environment:
+            ENTRYPOINT_MODE: supervisor
+        volumes:
+            - ./app:/var/www/app
+            - ./bootstrap:/var/www/bootstrap
+            - ./config:/var/www/config
+            - ./database:/var/www/database
+            - ./lang:/var/www/lang
+            - ./public:/var/www/public
+            - ./resources:/var/www/resources
+            - ./routes:/var/www/routes
+            - ./storage:/var/www/storage
+            - ./artisan:/var/www/artisan
+            - ./composer.json:/var/www/composer.json
+            - ./composer.lock:/var/www/composer.lock
+            - ./.env:/var/www/.env:ro
+            - /var/www/vendor
+            - /var/www/node_modules
+        depends_on:
+            - redis
+            - mysql
+
+    laravel-horizon:
+        build:
+            context: .
+            dockerfile: docker/horizon.Dockerfile
+        container_name: laravel-horizon
+        environment:
+            ENTRYPOINT_MODE: supervisor
+        volumes:
+            - ./app:/var/www/app
+            - ./bootstrap:/var/www/bootstrap
+            - ./config:/var/www/config
+            - ./database:/var/www/database
+            - ./lang:/var/www/lang
+            - ./public:/var/www/public
+            - ./resources:/var/www/resources
+            - ./routes:/var/www/routes
+            - ./storage:/var/www/storage
+            - ./artisan:/var/www/artisan
+            - ./composer.json:/var/www/composer.json
+            - ./composer.lock:/var/www/composer.lock
+            - ./.env:/var/www/.env:ro
+            - /var/www/vendor
+            - /var/www/node_modules
+        depends_on:
+            - redis
+            - mysql
+
     redis:
         image: redis:alpine
         container_name: redis
         ports:
             - "6379:6379"
 
-    # ✅ Horizon 専用コンテナ（Supervisor起動）
-    laravel-horizon:
-        build:
-            context: .
-            dockerfile: Dockerfile.horizon
-        volumes:
-            - .:/var/www
-        working_dir: /var/www
-        environment:
-            - QUEUE_CONNECTION=redis
-        depends_on:
-            - redis
-
     mysql:
         image: mysql:8.0
         container_name: mysql
         restart: always
         environment:
-            - MYSQL_ROOT_PASSWORD=root
-            - MYSQL_DATABASE=laravel
-            - MYSQL_USER=laravel
-            - MYSQL_PASSWORD=secret
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_DATABASE: laravel
+            MYSQL_USER: laravel
+            MYSQL_PASSWORD: secret
         ports:
             - "3306:3306"
         volumes:
-            - ./mysql_data:/var/lib/mysql
+            - mysql_data_volume:/var/lib/mysql
 
     phpmyadmin:
         image: phpmyadmin/phpmyadmin
-        platform: linux/amd64
+        container_name: phpmyadmin
         ports:
-            - "8080:80"
+            - "8081:80"
         environment:
             PMA_HOST: mysql
             MYSQL_ROOT_PASSWORD: root
+
+volumes:
+    mysql_data_volume:
