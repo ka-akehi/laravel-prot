@@ -1,7 +1,7 @@
 FROM laravel-base
 
 WORKDIR /var/www
-COPY . .
+COPY . /var/www
 
 # Entrypoint を登録
 COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh

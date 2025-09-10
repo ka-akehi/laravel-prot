@@ -7,9 +7,21 @@ services:
         environment:
             ENTRYPOINT_MODE: dev
         volumes:
-            - .:/var/www
+            - ./app:/var/www/app
+            - ./bootstrap:/var/www/bootstrap
+            - ./config:/var/www/config
+            - ./database:/var/www/database
+            - ./lang:/var/www/lang
+            - ./public:/var/www/public
+            - ./resources:/var/www/resources
+            - ./routes:/var/www/routes
+            - ./storage:/var/www/storage
+            - ./artisan:/var/www/artisan
+            - ./composer.json:/var/www/composer.json
+            - ./composer.lock:/var/www/composer.lock
             - ./.env:/var/www/.env:ro
             - /var/www/vendor
+            - /var/www/node_modules
         ports:
             - "8000:8000"
         depends_on:
@@ -24,9 +36,21 @@ services:
         environment:
             ENTRYPOINT_MODE: supervisor
         volumes:
-            - .:/var/www
+            - ./app:/var/www/app
+            - ./bootstrap:/var/www/bootstrap
+            - ./config:/var/www/config
+            - ./database:/var/www/database
+            - ./lang:/var/www/lang
+            - ./public:/var/www/public
+            - ./resources:/var/www/resources
+            - ./routes:/var/www/routes
+            - ./storage:/var/www/storage
+            - ./artisan:/var/www/artisan
+            - ./composer.json:/var/www/composer.json
+            - ./composer.lock:/var/www/composer.lock
             - ./.env:/var/www/.env:ro
             - /var/www/vendor
+            - /var/www/node_modules
         depends_on:
             - redis
             - mysql
@@ -39,9 +63,21 @@ services:
         environment:
             ENTRYPOINT_MODE: supervisor
         volumes:
-            - .:/var/www
+            - ./app:/var/www/app
+            - ./bootstrap:/var/www/bootstrap
+            - ./config:/var/www/config
+            - ./database:/var/www/database
+            - ./lang:/var/www/lang
+            - ./public:/var/www/public
+            - ./resources:/var/www/resources
+            - ./routes:/var/www/routes
+            - ./storage:/var/www/storage
+            - ./artisan:/var/www/artisan
+            - ./composer.json:/var/www/composer.json
+            - ./composer.lock:/var/www/composer.lock
             - ./.env:/var/www/.env:ro
             - /var/www/vendor
+            - /var/www/node_modules
         depends_on:
             - redis
             - mysql
@@ -64,13 +100,16 @@ services:
         ports:
             - "3306:3306"
         volumes:
-            - ./mysql_data:/var/lib/mysql
+            - mysql_data_volume:/var/lib/mysql
 
     phpmyadmin:
         image: phpmyadmin/phpmyadmin
         container_name: phpmyadmin
         ports:
-            - "8080:80"
+            - "8081:80"
         environment:
             PMA_HOST: mysql
             MYSQL_ROOT_PASSWORD: root
+
+volumes:
+    mysql_data_volume:
