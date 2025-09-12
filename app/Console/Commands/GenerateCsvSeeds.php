@@ -32,15 +32,14 @@ class GenerateCsvSeeds extends Command
         $this->info("⏳ Generating {$rows} countries...");
 
         $fp = fopen($path, 'w');
-        fputcsv($fp, ['id', 'code', 'name', 'region', 'is_active', 'created_at', 'updated_at']);
+        fputcsv($fp, ['code', 'name', 'region', 'is_active', 'created_at', 'updated_at']);
 
         $now = date('Y-m-d H:i:s');
         for ($i = 1; $i <= $rows; $i++) {
             fputcsv($fp, [
-                $i,
-                strtoupper(Str::random(6)),
-                'Country '.Str::random(8),
-                'Region '.rand(1, 50),
+                strtoupper(Str::random(16)),
+                'Country '.Str::random(16),
+                'Region '.rand(1, 5000),
                 rand(0, 1),
                 $now,
                 $now,
@@ -59,16 +58,15 @@ class GenerateCsvSeeds extends Command
         $this->info("⏳ Generating {$rows} users...");
 
         $fp = fopen($path, 'w');
-        fputcsv($fp, ['id', 'country_id', 'name', 'email', 'password', 'active', 'created_at', 'updated_at']);
+        fputcsv($fp, ['country_id', 'name', 'email', 'password', 'active', 'created_at', 'updated_at']);
 
         $now = date('Y-m-d H:i:s');
         for ($i = 1; $i <= $rows; $i++) {
             fputcsv($fp, [
-                $i,
                 rand(1, 1_000_000), // country_id
-                'User '.Str::random(10),
-                Str::random(10).'@example.com',
-                '$2y$10$usesomesillystringfore7hnbRJHxXVLeakoG8K30oukPsA.ztMG', // 固定 bcrypt
+                'User '.Str::random(16),
+                Str::random(16).'@example.com',
+                '$2y$10$usesomesillystringfore7hnbRJHxXVLeakoG8K30oukPsA.ztMG',
                 1,
                 $now,
                 $now,
@@ -87,14 +85,13 @@ class GenerateCsvSeeds extends Command
         $this->info("⏳ Generating {$rows} addresses...");
 
         $fp = fopen($path, 'w');
-        fputcsv($fp, ['id', 'user_id', 'address', 'created_at', 'updated_at']);
+        fputcsv($fp, ['user_id', 'address', 'created_at', 'updated_at']);
 
         $now = date('Y-m-d H:i:s');
         for ($i = 1; $i <= $rows; $i++) {
             fputcsv($fp, [
-                $i,
                 rand(1, 3_000_000), // user_id
-                'Address '.Str::random(12),
+                'Address '.Str::random(16),
                 $now,
                 $now,
             ]);
