@@ -12,7 +12,6 @@ chmod -R 755 bootstrap storage
 
 echo "🔧 Laravel setup"
 php artisan config:cache
-php artisan route:cache
 php artisan view:cache
 php artisan package:discover
 
