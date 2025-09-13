@@ -5,14 +5,17 @@ set -e
 echo "▶️ Composer install (safe re-run)"
 composer install --prefer-dist --optimize-autoloader --no-interaction
 
-echo "📁 Ensuring cache dirs"
-mkdir -p bootstrap/cache storage/framework/cache/data
-chown -R www-data:www-data bootstrap storage
-chmod -R 755 bootstrap storage
+echo "📁 Ensuring storage & cache dirs"
+mkdir -p bootstrap/cache \
+         storage/framework/cache/data \
+         storage/framework/sessions \
+         storage/framework/views \
+         storage/logs
 
 echo "🔧 Laravel setup"
-php artisan config:cache
-php artisan view:cache
+php artisan config:clear
+php artisan cache:clear
+php artisan view:clear
 php artisan package:discover
 
 if [ "$ENTRYPOINT_MODE" = "supervisor" ]; then
