@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             AddressesTableSeeder::class,
             AccountsTableSeeder::class,
+            StatusLogSeeder::class,
         ]);
     }
 }

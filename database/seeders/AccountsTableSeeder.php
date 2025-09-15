@@ -9,13 +9,21 @@ class AccountsTableSeeder extends Seeder
 {
     public function run(): void
     {
-        DB::table('accounts')->truncate();
+        // 外部キー制約を考慮 → TRUNCATE ではなく DELETE + AUTO_INCREMENT リセット
+        DB::table('accounts')->delete();
+        DB::statement('ALTER TABLE accounts AUTO_INCREMENT = 1');
 
-        DB::table('accounts')->insert([
-            'name' => 'TestAccount',
-            'balance' => 100,
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
+        $accounts = [];
+        for ($i = 1; $i <= 100; $i++) {
+            $accounts[] = [
+                'id' => $i,
+                'name' => "Account {$i}",
+                'balance' => rand(50, 1000),
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
+        }
+
+        DB::table('accounts')->insert($accounts);
     }
 }
