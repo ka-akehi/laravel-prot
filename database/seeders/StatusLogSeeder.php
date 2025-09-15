@@ -9,7 +9,7 @@ class StatusLogSeeder extends Seeder
 {
     public function run(): void
     {
-        // 外部キー制約を考慮 → TRUNCATE ではなく DELETE + AUTO_INCREMENT リセット
+        // 外部キー制約対応: TRUNCATE の代わりに DELETE + AUTO_INCREMENT リセット
         DB::table('status_logs')->delete();
         DB::statement('ALTER TABLE status_logs AUTO_INCREMENT = 1');
 
