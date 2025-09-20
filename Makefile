@@ -15,3 +15,6 @@ down:
 # クリーンアップ（ビルドキャッシュ含む）
 clean:
 	docker system prune -af --volumes
+
+laravel-app:
+	docker-compose exec laravel-app bash
