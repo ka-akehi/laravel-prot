@@ -19,6 +19,7 @@ class AccountsTableSeeder extends Seeder
                 'id' => $i,
                 'name' => "Account {$i}",
                 'balance' => rand(50, 1000),
+                'version' => 0,
                 'created_at' => now(),
                 'updated_at' => now(),
             ];
