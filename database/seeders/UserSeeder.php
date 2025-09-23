@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class UserSeeder extends Seeder
 {
@@ -11,14 +12,26 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        $countryIds = \App\Models\Country::pluck('id')->toArray();
+        $path = storage_path('app/seeds/users.csv');
 
-        // 1,000件 × 30回 = 30,000件
-        for ($i = 0; $i < 30; $i++) {
-            \App\Models\User::factory(1000)->make()->each(function ($user) use ($countryIds) {
-                $user->country_id = $countryIds[array_rand($countryIds)];
-                $user->save();
-            });
+        if (! file_exists($path)) {
+            $this->command->error("❌ CSV not found: {$path}");
+
+            return;
         }
+
+        $query = <<<SQL
+            LOAD DATA LOCAL INFILE '{$path}'
+            INTO TABLE users
+            FIELDS TERMINATED BY ','
+            ENCLOSED BY '"'
+            LINES TERMINATED BY '\n'
+            IGNORE 1 ROWS
+            (country_id, name, email, email_verified_at, password, active, remember_token, created_at, updated_at)
+        SQL;
+
+        DB::connection()->getPdo()->exec($query);
+
+        echo "✅ Completed: Users loaded from CSV.\n";
     }
 }

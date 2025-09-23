@@ -101,6 +101,7 @@ services:
             - "3306:3306"
         volumes:
             - mysql_data_volume:/var/lib/mysql
+            - ./docker/mysql/conf.d:/etc/mysql/conf.d
 
     phpmyadmin:
         image: phpmyadmin/phpmyadmin

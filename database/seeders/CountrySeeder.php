@@ -2,14 +2,14 @@
 
 namespace Database\Seeders;
 
-use App\Models\Country;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class CountrySeeder extends Seeder
 {
     public function run(): void
     {
-        $path = base_path('countries_seeder.csv');
+        $path = storage_path('app/seeds/countries.csv');
 
         if (! file_exists($path)) {
             $this->command->error("❌ CSV not found: {$path}");
@@ -17,31 +17,18 @@ class CountrySeeder extends Seeder
             return;
         }
 
-        $csv = new \SplFileObject($path);
-        $csv->setFlags(\SplFileObject::READ_CSV);
-        $csv->setCsvControl(',');
+        $query = <<<SQL
+            LOAD DATA LOCAL INFILE '{$path}'
+            INTO TABLE countries
+            FIELDS TERMINATED BY ','
+            ENCLOSED BY '"'
+            LINES TERMINATED BY '\n'
+            IGNORE 1 ROWS
+            (code, name, region, created_at, updated_at)
+        SQL;
 
-        $header = [];
-        foreach ($csv as $index => $row) {
-            if ($row === [null] || empty($row)) {
-                continue;
-            }
+        DB::connection()->getPdo()->exec($query);
 
-            if ($index === 0) {
-                $header = $row;
-
-                continue;
-            }
-
-            $data = array_combine($header, $row);
-
-            Country::updateOrCreate(
-                ['code' => $data['code']],
-                [
-                    'name' => $data['name'],
-                    'region' => $data['region'],
-                ]
-            );
-        }
+        echo "✅ Completed: Countries loaded from CSV.\n";
     }
 }
