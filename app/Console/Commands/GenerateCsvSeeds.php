@@ -79,7 +79,7 @@ class GenerateCsvSeeds extends Command
                 rand(1, 1_000_000), // country_id（countries.id の範囲を仮定）
                 'User '.\Str::random(16),
                 'user'.$i.'@example.com',
-                rand(0, 1) ? $now : null, // email_verified_at
+                $now, // email_verified_at
                 '$2y$10$usesomesillystringfore7hnbRJHxXVLeakoG8K30oukPsA.ztMG', // ダミーのbcrypt
                 rand(0, 1), // active
                 \Str::random(20), // remember_token
