@@ -58,16 +58,33 @@ class GenerateCsvSeeds extends Command
         $this->info("⏳ Generating {$rows} users...");
 
         $fp = fopen($path, 'w');
-        fputcsv($fp, ['country_id', 'name', 'email', 'password', 'active', 'created_at', 'updated_at']);
 
-        $now = date('Y-m-d H:i:s');
+        // ヘッダー行をテーブル定義に合わせる
+        fputcsv($fp, [
+            'id',
+            'country_id',
+            'name',
+            'email',
+            'email_verified_at',
+            'password',
+            'active',
+            'remember_token',
+            'created_at',
+            'updated_at',
+        ]);
+
         for ($i = 1; $i <= $rows; $i++) {
+            $now = date('Y-m-d H:i:s');
+
             fputcsv($fp, [
-                rand(1, 1_000_000), // country_id
-                'User '.Str::random(16),
-                Str::random(16).'@example.com',
-                '$2y$10$usesomesillystringfore7hnbRJHxXVLeakoG8K30oukPsA.ztMG',
-                1,
+                $i, // id（AUTO_INCREMENTに合わせて連番）
+                rand(1, 1_000_000), // country_id（countries.id の範囲を仮定）
+                'User '.\Str::random(16),
+                'user'.$i.'@example.com',
+                rand(0, 1) ? $now : null, // email_verified_at
+                '$2y$10$usesomesillystringfore7hnbRJHxXVLeakoG8K30oukPsA.ztMG', // ダミーのbcrypt
+                rand(0, 1), // active
+                \Str::random(20), // remember_token
                 $now,
                 $now,
             ]);
