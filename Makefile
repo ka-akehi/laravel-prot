@@ -5,8 +5,12 @@ laravel-base:
 	docker build -f docker/base.Dockerfile -t laravel-base .
 
 # 全体をビルドして起動
-up: laravel-base
+build-up: laravel-base
 	docker-compose build && docker-compose up -d
+
+# 起動
+up:
+	docker-compose up -d
 
 # 全体を停止
 down:
@@ -28,3 +32,11 @@ mysql-laravel:
 # DDLファイル出力
 dump-ddl:
 	docker exec -i mysql mysqldump -u laravel -psecret --no-data --no-tablespaces laravel > database/schema/schema.sql
+
+# マイグレーション実行（docker外から）
+migrate:
+	docker-compose exec laravel-app php artisan migrate
+
+# マイグレーションのリフレッシュ（リセット＋再実行）
+migrate-fresh:
+	docker-compose exec laravel-app php artisan migrate:fresh --seed
