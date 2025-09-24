@@ -24,7 +24,7 @@ class CountrySeeder extends Seeder
             ENCLOSED BY '"'
             LINES TERMINATED BY '\n'
             IGNORE 1 ROWS
-            (code, name, region, created_at, updated_at)
+            (code, name, region, is_active, created_at, updated_at)
         SQL;
 
         DB::connection()->getPdo()->exec($query);
