@@ -61,7 +61,6 @@ class GenerateCsvSeeds extends Command
 
         // ヘッダー行をテーブル定義に合わせる
         fputcsv($fp, [
-            'id',
             'country_id',
             'name',
             'email',
@@ -77,7 +76,6 @@ class GenerateCsvSeeds extends Command
             $now = date('Y-m-d H:i:s');
 
             fputcsv($fp, [
-                $i, // id（AUTO_INCREMENTに合わせて連番）
                 rand(1, 1_000_000), // country_id（countries.id の範囲を仮定）
                 'User '.\Str::random(16),
                 'user'.$i.'@example.com',
