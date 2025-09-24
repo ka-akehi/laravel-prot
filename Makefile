@@ -18,3 +18,13 @@ clean:
 
 laravel-app:
 	docker-compose exec laravel-app bash
+
+mysql-root:
+	docker exec -it mysql mysql -uroot -proot
+
+mysql-laravel:
+	docker exec -it mysql mysql -u laravel -psecret laravel
+
+# DDLファイル出力
+dump-ddl:
+	docker exec -i mysql mysqldump -u laravel -psecret --no-data --no-tablespaces laravel > database/schema/schema.sql
