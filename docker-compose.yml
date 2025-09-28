@@ -102,6 +102,22 @@ services:
         volumes:
             - mysql_data_volume:/var/lib/mysql
             - ./docker/mysql/conf.d:/etc/mysql/conf.d
+        command: --server-id=1 --log-bin=mysql-bin --binlog-format=ROW --gtid-mode=ON --enforce-gtid-consistency=ON
+
+    mysql-replica:
+        image: mysql:8.0
+        container_name: mysql-replica
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_DATABASE: laravel
+            MYSQL_USER: laravel
+            MYSQL_PASSWORD: secret
+        ports:
+            - "3307:3306"
+        volumes:
+            - mysql_replica_data_volume:/var/lib/mysql
+        command: --server-id=2 --log-bin=mysql-bin --binlog-format=ROW --gtid-mode=ON --enforce-gtid-consistency=ON
 
     phpmyadmin:
         image: phpmyadmin/phpmyadmin
@@ -114,3 +130,4 @@ services:
 
 volumes:
     mysql_data_volume:
+    mysql_replica_data_volume:

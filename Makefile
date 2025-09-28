@@ -29,6 +29,12 @@ mysql-root:
 mysql-laravel:
 	docker exec -it mysql mysql -u laravel -psecret laravel
 
+mysql-replica-root:
+	docker exec -it mysql-replica mysql -uroot -proot
+
+mysql-replica-laravel:
+	docker exec -it mysql-replica mysql -u laravel -psecret laravel
+
 # DDLファイル出力
 dump-ddl:
 	docker exec -i mysql mysqldump -u laravel -psecret --no-data --no-tablespaces laravel > database/schema/schema.sql
@@ -38,5 +44,5 @@ migrate:
 	docker-compose exec laravel-app php artisan migrate
 
 # マイグレーションのリフレッシュ（リセット＋再実行）
-migrate-fresh:
+migrate-seed:
 	docker-compose exec laravel-app php artisan migrate:fresh --seed
