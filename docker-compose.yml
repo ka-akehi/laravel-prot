@@ -128,6 +128,18 @@ services:
             PMA_HOST: mysql
             MYSQL_ROOT_PASSWORD: root
 
+    fluent-bit:
+        image: fluent/fluent-bit:2.1
+        container_name: fluent-bit
+        volumes:
+            - ./docker/fluent-bit/fluent-bit.conf:/fluent-bit/etc/fluent-bit.conf:ro
+            - ./docker/fluent-bit/parsers.conf:/fluent-bit/etc/parsers.conf:ro
+            - ./storage/logs:/var/log/laravel:ro
+            - fluentbit_state:/fluent-bit/state
+        depends_on:
+            - laravel-app
+
 volumes:
     mysql_data_volume:
     mysql_replica_data_volume:
+    fluentbit_state:
