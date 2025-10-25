@@ -129,12 +129,16 @@ services:
             MYSQL_ROOT_PASSWORD: root
 
     fluent-bit:
-        image: fluent/fluent-bit:2.1
+        build:
+            context: .
+            dockerfile: docker/fluent-bit/Dockerfile
+        image: fluent-bit-local
         container_name: fluent-bit
         volumes:
             - ./docker/fluent-bit/fluent-bit.conf:/fluent-bit/etc/fluent-bit.conf:ro
             - ./docker/fluent-bit/parsers.conf:/fluent-bit/etc/parsers.conf:ro
             - ./storage/logs:/var/log/laravel:ro
+            - ../next-prot/logs:/var/log/nextjs:ro
             - fluentbit_state:/fluent-bit/state
         depends_on:
             - laravel-app
