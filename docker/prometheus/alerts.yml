@@ -1,0 +1,11 @@
+groups:
+  - name: auth-alerts
+    rules:
+      - alert: ExcessiveInvalidAuth
+        expr: log_metric_gauge_next_invalid_auth_attempts_per_minute > 10
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: "認証失敗が多発しています"
+          description: "過去1分で {{ $value }} 件の invalid-credentials を検知しています"
