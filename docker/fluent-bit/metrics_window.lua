@@ -1,4 +1,5 @@
 local WINDOW_SECONDS = 60
+local HEARTBEAT_RESULT = "__heartbeat__"
 local timestamps = {}
 
 local function cleanup(now)
@@ -14,9 +15,14 @@ end
 
 function count_per_minute(tag, timestamp, record)
     local now = os.time()
-    table.insert(timestamps, now)
-    cleanup(now)
+    local result = record.result
 
+    if result ~= HEARTBEAT_RESULT then
+        table.insert(timestamps, now)
+    end
+
+    cleanup(now)
     record.per_minute_count = #timestamps
+
     return 2, timestamp, record
 end
