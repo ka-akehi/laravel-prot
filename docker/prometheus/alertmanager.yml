@@ -1,0 +1,38 @@
+route:
+  receiver: slack-error
+  group_by: ["alertname"]
+  group_wait: 30s
+  group_interval: 1m
+  repeat_interval: 1m
+  routes:
+    - receiver: slack-recovered
+      matchers:
+        - alertstate="resolved"
+
+receivers:
+  - name: slack-error
+    slack_configs:
+      - api_url: __SLACK_WEBHOOK_URL__
+        channel: "#alerts"
+        username: "fluent-bit-prom"
+        send_resolved: false
+        title: "error"
+        text: |
+          *Alert*: [__ENVIRONMENT__] {{ .CommonLabels.alertname }}
+          *Current Invalid Auth (1m window)*: {{ .CommonAnnotations.current_value }}
+          *Summary*: {{ .CommonAnnotations.summary }}
+          *Description*: {{ .CommonAnnotations.description }}
+  - name: slack-recovered
+    slack_configs:
+      - api_url: __SLACK_WEBHOOK_URL__
+        channel: "#alerts"
+        username: "fluent-bit-prom"
+        send_resolved: true
+        title: "recovered"
+        text: |
+          {{- if eq .Status "resolved" }}
+          *Alert*: [__ENVIRONMENT__] {{ .CommonLabels.alertname }}
+          *Recovered At*: {{ .EndsAt }}
+          *Max Invalid Auth (1m window)*: {{ .CommonAnnotations.current_value }}
+          *Summary*: {{ .CommonAnnotations.summary }}
+          {{- end }}
